@@ -1,0 +1,19 @@
+# This is an example config.site for building plugins manually after
+# installing libgimp2.0.
+# It should be placed in $PREFIX/share/
+# It may need to be adjusted based on your plugin's dependencies.
+
+# A convenient reference for our Homebrew install dir
+: ${HOMEBREW_ROOT:=$(brew --prefix)}
+
+export PATH="$PREFIX/bin:$HOMEBREW_ROOT/opt/gettext/bin:$PATH"
+
+export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PREFIX/share/pkgconfig:$HOMEBREW_ROOT/lib/pkgconfig:$HOMEBREW_ROOT/opt/gegl/lib/pkgconfig:$HOMEBREW_ROOT/opt/libffi/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
+
+export ACLOCAL_FLAGS="-I $PREFIX/share/aclocal -I $HOMEBREW_ROOT/opt/gettext/share/aclocal/ -I $HOMEBREW_ROOT/share/aclocal $ACLOCAL_FLAGS"
+
+export LDFLAGS="-L$HOMEBREW_ROOT/opt/gettext/lib -L$HOMEBREW_ROOT/lib $LDFLAGS"
+
+export CPPFLAGS="-I$HOMEBREW_ROOT/opt/gettext/include -I$HOMEBREW_ROOT/include $CPPFLAGS"
