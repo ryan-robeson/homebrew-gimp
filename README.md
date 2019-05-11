@@ -1,4 +1,10 @@
-# Ryan-robeson Gimp
+# ryan-robeson/gimp
+
+This Tap exists primarily to provide libgimp2.0 on macOS.
+
+Check out my guide on [Building Resynthesizer for GIMP](https://gist.github.com/ryan-robeson/5841f712ff23c910bbbfac793c16bfad) for an example.
+
+Hopefully this will help make compiling plugins on macOS a bit more accessible.
 
 ## How do I install these formulae?
 `brew install ryan-robeson/gimp/<formula>`
