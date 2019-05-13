@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+require "pry"
+
+#root_url = "http://127.0.0.1:8000"
+root_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
+
+#formula = "mypaint-brushes"
+formula = "libgimp2.0"
+system("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
+
+bottles = Dir["*\.bottle\.*"]
+
+# Remove double dashes in filenames
+bottles.map! do |b|
+  new = b.gsub(/--/, "-")
+  FileUtils.mv b, new unless File.exist? new
+  new
+end
+
+orig_os_pattern = /(?<=[^[:word:]])sierra(?=\.?)/
+
+# Copy for High Sierra and Mojave
+["high_sierra", "mojave"].each do |os|
+  bottles.each do |b|
+    new = b.gsub(orig_os_pattern, os)
+    FileUtils.cp b, new unless File.exist? new
+  end
+
+  Dir["*\.#{os}\.*json"].each do |json_file|
+    c = File.read json_file
+    c.gsub!(orig_os_pattern, os)
+    File.write json_file, c
+  end
+end
+
+# Update formula with bottle info
+system("brew", "bottle", "--merge", "--write", "--no-commit", *Dir["#{formula}*.json"])
+
+if formula == "libgimp2.0"
+  # Hopefully Homebrew detecting libgimp2.0 as non-relocatable is a false positive.
+  # libgimpbase appears to be the culprit
+  c = File.read("Formula/libgimp2.0.rb")
+  c.gsub!(/^\s*prefix .+\n/, '')
+  c.gsub!(/(?<=cellar )".+"/, ':any_skip_relocation')
+  File.write("Formula/libgimp2.0.rb", c)
+end
+
+# binding.pry

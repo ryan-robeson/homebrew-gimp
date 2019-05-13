@@ -3,7 +3,13 @@ class Libgimp20 < Formula
   homepage "https://www.gimp.org/"
   url "https://gitlab.gnome.org/GNOME/gimp.git", tag: "GIMP_2_10_10"
   version "2.10.10"
-  sha256 ""
+  bottle do
+    root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
+    cellar :any_skip_relocation
+    sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :mojave
+    sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :high_sierra
+    sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :sierra
+  end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -77,6 +83,17 @@ class Libgimp20 < Formula
       locale_dir.install f => locale_dir/"gimp20-libgimp.mo"
     end
     
+  end
+
+  def caveats
+    s = <<~EOS
+      If anything goes wrong with the bottle try installing from source.
+        `brew uninstall libgimp2.0; brew install --build-from-source libgimp2.0`
+
+      Please report any issues to:
+        https://github.com/ryan-robeson/homebrew-gimp/issues
+    EOS
+    s
   end
 
   test do
