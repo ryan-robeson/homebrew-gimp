@@ -5,7 +5,7 @@ class Libgimp20 < Formula
   version "2.10.10"
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
-    cellar :any_skip_relocation
+    cellar :any
     sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :mojave
     sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :high_sierra
     sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :sierra
