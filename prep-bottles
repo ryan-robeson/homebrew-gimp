@@ -3,10 +3,11 @@
 require "pry"
 
 #root_url = "http://127.0.0.1:8000"
-root_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
+root_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.1"
 
 #formula = "mypaint-brushes"
-formula = "libgimp2.0"
+#formula = "libgimp2.0"
+formula = "resynthesizer"
 system("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
 
 bottles = Dir["*\.bottle\.*"]
