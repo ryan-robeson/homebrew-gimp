@@ -1,13 +1,20 @@
 #!/usr/bin/env ruby
 
+require "fileutils"
 require "pry"
 
+bottle_dir = "bottles"
 #root_url = "http://127.0.0.1:8000"
 root_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.1"
 
 #formula = "mypaint-brushes"
 #formula = "libgimp2.0"
 formula = "resynthesizer"
+
+# Generate bottles in `bottle_dir`
+FileUtils.mkdir_p(bottle_dir)
+Dir.chdir(bottle_dir)
+
 system("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
 
 bottles = Dir["*\.bottle\.*"]
