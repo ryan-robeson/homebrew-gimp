@@ -42,7 +42,7 @@ if formula == "libgimp2.0"
   # libgimpbase appears to be the culprit
   c = File.read("Formula/libgimp2.0.rb")
   c.gsub!(/^\s*prefix .+\n/, '')
-  c.gsub!(/(?<=cellar )".+"/, ':any_skip_relocation')
+  c.gsub!(/(?<=cellar )".+"/, ':any')
   File.write("Formula/libgimp2.0.rb", c)
 end
 
