@@ -24,9 +24,6 @@ brew install https://raw.githubusercontent.com/ryan-robeson/homebrew-gimp/master
 
 ### Building Bottles
 
-1. `brew install --build-bottle $formula`
-2. Edit './prep-bottles'
-    * Adjust the 'root\_url' and 'formula' variables as necessary. (Yes, this needs more automation)
-3. `./prep-bottles`
+1. `./prep-bottles -t=$tag -f=$formula`
     * This script currently assumes Sierra as the build platform.
-4. Bottles have been built and the formula has been updated.
+2. Bottles have been built in `./bottles` and the formula has been updated.

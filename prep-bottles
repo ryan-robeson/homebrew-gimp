@@ -1,23 +1,89 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env ruby -s
 
 require "fileutils"
-require "pry"
+require "shellwords"
 
 bottle_dir = "bottles"
-#root_url = "http://127.0.0.1:8000"
-root_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.1"
+local_url = "http://127.0.0.1:8000"
+release_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/"
 
-#formula = "mypaint-brushes"
-#formula = "libgimp2.0"
-formula = "resynthesizer"
+bottles = Dir["*\.bottle\.*"]
+
+def usage
+  $stderr.puts <<~eos
+  Usage: #{$0} [-h|-help] [-skip-install] (-t=TAG|-local) -f=FORMULA
+  Prepares a bottle for FORMULA for release.
+
+  By default, reinstalls FORMULA with --build-bottle.
+  Run with -skip-install if that has already been done.
+
+    -h, -help\tDisplay this message
+    -t=TAG\tThe tag this bottle will be released under (e.g. v1.1)
+    -local\tThis bottle will be served locally (testing only).
+    \t\t-t is ignored.
+    -f=FORMULA\tThe formula being bottled (e.g. resynthesizer)
+    -skip-install\tSkip reinstalling FORMULA with the --build-bottle
+    \t\toption. Saves a lot of time when this has already been
+    \t\tdone manually.
+
+  Example: #{$0} -t=v1.1 -f=resynthesizer
+  eos
+  exit 1
+end
+
+# Accepts a formula name (path and extension are optional)
+# Makes sure the formula exists.
+# Returns the formula name (minus path and extension) or
+# ends the program.
+def find_formula!(f)
+  f = f.dup
+  # Allow specifying formula name with extension
+  f.gsub!(/\.rb$/, '')
+  # Allow specifying path to formula
+  f = File.basename(f)
+
+  if !File.exist? "Formula/#{f}.rb"
+    $stderr.puts "Formula '#{f}' not found."
+    exit 1
+  end
+
+  f
+end
+
+usage if $h || $help
+
+usage if $f.nil? || ($t.nil? && $local.nil?)
+
+formula = find_formula!($f).shellescape
+
+if $local
+  root_url = local_url
+else
+  root_url = release_url + $t.shellescape
+end
+
+# For consistency
+skip_install = $skip_install
+
+exit 1
 
 # Generate bottles in `bottle_dir`
 FileUtils.mkdir_p(bottle_dir)
 Dir.chdir(bottle_dir)
 
-system("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
+# Reinstall formula with --build-bottle so bottle is built correctly.
+unless skip_install
+  system("brew", "uninstall", formula)
 
-bottles = Dir["*\.bottle\.*"]
+  # Can't continue if the install fails
+  unless system("brew", "install", "--build-bottle", formula)
+    $stderr.puts "brew install --build-bottle #{formula} failed."
+    exit 1
+  end
+end
+
+# Generate the bottles along with json used for updating the formula
+system("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
 
 # Remove double dashes in filenames
 bottles.map! do |b|
@@ -45,13 +111,12 @@ end
 # Update formula with bottle info
 system("brew", "bottle", "--merge", "--write", "--no-commit", *Dir["#{formula}*.json"])
 
+# Post processing
 if formula == "libgimp2.0"
   # Hopefully Homebrew detecting libgimp2.0 as non-relocatable is a false positive.
   # libgimpbase appears to be the culprit
-  c = File.read("Formula/libgimp2.0.rb")
+  c = File.read("Formula/#{formula}.rb")
   c.gsub!(/^\s*prefix .+\n/, '')
   c.gsub!(/(?<=cellar )".+"/, ':any')
-  File.write("Formula/libgimp2.0.rb", c)
+  File.write("Formula/#{formula}.rb", c)
 end
-
-# binding.pry
