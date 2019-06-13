@@ -18,7 +18,8 @@ def usage
   Run with -skip-install if that has already been done.
 
     -h, -help\tDisplay this message
-    -t=TAG\tThe tag this bottle will be released under (e.g. v1.1)
+    -t=TAG\tThe tag this bottle will be released under (e.g. v1.1).
+    \t\tTAG doesn't have to exist, but won't be created by this script.
     -local\tThis bottle will be served locally (testing only).
     \t\t-t is ignored.
     -f=FORMULA\tThe formula being bottled (e.g. resynthesizer)
@@ -64,8 +65,6 @@ end
 
 # For consistency
 skip_install = $skip_install
-
-exit 1
 
 # Generate bottles in `bottle_dir`
 FileUtils.mkdir_p(bottle_dir)
