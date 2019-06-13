@@ -16,7 +16,7 @@ class Resynthesizer < Formula
   depends_on "automake" => :build
   depends_on "intltool" => :build
   depends_on "pkg-config" => :build
-  depends_on "libgimp2.0"
+  depends_on "ryan-robeson/gimp/libgimp2.0"
 
   def install
     system "./autogen.sh"
