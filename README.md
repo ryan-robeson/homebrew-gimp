@@ -27,3 +27,10 @@ brew install https://raw.githubusercontent.com/ryan-robeson/homebrew-gimp/master
 1. `./prep-bottles -t=$tag -f=$formula`
     * This script currently assumes Sierra as the build platform.
 2. Bottles have been built in `./bottles` and the formula has been updated.
+
+### Distributing Bottles
+
+1. Build the bottles.
+    * See: **Building Bottles**
+2. Release them
+    * `./release -t=$tag -publish $file1 $file2 $file3`

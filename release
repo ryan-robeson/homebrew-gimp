@@ -1,0 +1,127 @@
+#!/usr/bin/env ruby -s
+
+require 'open3'
+
+def usage
+  $stderr.puts <<~eos
+  Usage: #{$0} [-h|-help] -t=TAG [-m=MESSAGE|-F=FILE] [-publish] [-edit] [FILES...]
+  Without -publish, creates a new draft release for TAG.
+  With -publish, creates a release for TAG, or publishes the previously created draft.
+
+    -h, -help\tPrint this message
+    -t=TAG\tSpecify the tag for the release. It will
+    \t\tbe created if it does not exist.
+    -m=MESSAGE\tThe text up to the first blank line in MESSAGE
+    \t\tis treated as the release title, and the rest is used
+    \t\tas the description in Markdown format.
+    \t\tWhen both -m and -F are given, -m is ignored.
+    -F=FILE\tRead the release title and description from FILE.
+    -publish\tPublishes the release.
+    -edit\t\tWhen publishing a draft, this option can be used to
+    \t\topen the title and description in an editor.
+    FILES\t\tSpace-separated list of files to include in
+    \t\tthe release.
+  eos
+  exit 1
+end
+
+def hub_show(t)
+  puts "-"*80
+  system(*%w[hub release show --show-downloads], t)
+  puts "-"*80
+end
+
+usage if $h || $help
+usage if $t.nil?
+
+tag = $t
+
+publish = $publish
+draft = !publish
+
+new_release = true
+
+message = $m
+file = $F
+edit = $edit
+
+# Prepare files for hub's command line
+files = ARGV.dup.map do |f|
+  if !File.exist? f
+    $stderr.puts "Warning: File not found: #{f}. Skipping..."
+    next
+  end
+
+  ["--attach", f]
+end.compact.flatten
+
+releases, process_status = Open3.capture2(*%w[hub release --include-drafts -L 50 -f %T:%S%n])
+if ! process_status.success?
+  $stderr.puts "Failed to check releases"
+  exit 1
+end
+
+releases =  releases.split("\n").map { |r| a = r.split(':'); { tag: a[0], status: a[1] }  }
+
+release = releases.find { |r| r[:tag] == tag }
+if release
+  if release[:status].nil? # Release has already been published
+    $stderr.puts "Error: Release for tag '#{tag}' already exists and is not a draft. This is probably a mistake.\n\n"
+    hub_show(tag)
+    exit 1
+  else
+    new_release = false
+
+    if draft # Draft already exists
+      $stderr.puts "Error: A draft for tag '#{tag}' already exists. You can publish it with #{$0} -t=#{tag} -publish\n\n"
+      hub_show(tag)
+      exit 1
+    end
+  end
+end
+
+hub_args = %w[ release ]
+
+if new_release
+  hub_args << 'create'
+else
+  hub_args << 'edit'
+end
+
+if publish
+  hub_args << '--draft=false'
+else
+  hub_args << '--draft'
+end
+
+if file
+  hub_args.push('--file', file)
+elsif message
+  hub_args.push('--message', message)
+else
+  hub_args.push('--message', '') unless new_release || edit
+end
+
+hub_args << '--edit' if edit
+
+hub_args.push(*files)
+
+if publish
+  puts "Publishing release (#{tag})..."
+else
+  puts "Creating draft (#{tag})..."
+end
+
+if system('hub', *hub_args, tag)
+  puts "All Done!"
+
+  if draft
+    puts "Publish with #{$0} -t=#{tag} -publish #{files.empty? ? 'FILES...' : nil}"
+  end
+
+  hub_show(tag)
+  exit 0
+else
+  $stderr.puts "Something went wrong... Sorry!"
+  exit 1
+end
