@@ -71,7 +71,7 @@ Dir.chdir(bottle_dir)
 
 # Reinstall formula with --build-bottle so bottle is built correctly.
 unless skip_install
-  system("brew", "uninstall", formula)
+  system("brew", "uninstall", "--ignore-dependencies", formula)
 
   # Can't continue if the install fails
   unless system("brew", "install", "--build-bottle", formula)
@@ -106,7 +106,7 @@ bottles = Dir["#{bottle_prefix}*\.bottle\.*"]
 bottles.map! do |b|
   new = b.gsub(/--/, "-")
   # Always overwrite json because rebuilds output the same name.
-  if new.end_with?('.json') || ! File.exist? new
+  if new.end_with?('.json') || ! File.exist?(new)
     FileUtils.mv b, new
   end
   new
@@ -150,10 +150,10 @@ system("brew", "bottle", "--merge", "--write", "--no-commit", *Dir["#{bottle_pre
 if formula == "libgimp2.0"
   # Hopefully Homebrew detecting libgimp2.0 as non-relocatable is a false positive.
   # libgimpbase appears to be the culprit
-  c = File.read("Formula/#{formula}.rb")
+  c = File.read("../Formula/#{formula}.rb")
   c.gsub!(/^\s*prefix .+\n/, '')
   c.gsub!(/(?<=cellar )".+"/, ':any')
-  File.write("Formula/#{formula}.rb", c)
+  File.write("../Formula/#{formula}.rb", c)
 end
 
 # Output created bottles for possible automation.
