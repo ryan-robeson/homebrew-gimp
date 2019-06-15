@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby -s
 
 require "fileutils"
+require "open3"
 require "shellwords"
 
 bottle_dir = "bottles"
 local_url = "http://127.0.0.1:8000"
 release_url = "https://github.com/ryan-robeson/homebrew-gimp/releases/download/"
-
-bottles = Dir["*\.bottle\.*"]
 
 def usage
   $stderr.puts <<~eos
@@ -82,33 +81,70 @@ unless skip_install
 end
 
 # Generate the bottles along with json used for updating the formula
-system("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
+out, status = Open3.capture2("brew", "bottle", "--json", "--root-url=#{root_url}", formula)
+if ! status.success?
+  exit 1
+end
+
+# out looks like:
+# ==> Determining ryan-robeson/gimp/resynthesizer bottle rebuild...
+# ==> Bottling resynthesizer--2.0.3.sierra.bottle.1.tar.gz...
+# ./resynthesizer--2.0.3.sierra.bottle.1.tar.gz
+#   bottle do
+#     cellar :any
+#     rebuild 1
+#     sha256 "536e40d3d32e7b89d2d72d7295f4e8f9712aa16c5c7a8a7cdc4356238d3ad425" => :sierra
+#   end
+bottle = out.gsub(/==>.+\n/, '').each_line.first.chomp # ./resynthesizer--2.0.3.sierra.bottle.1.tar.gz
+
+bottle_prefix = bottle.gsub(/[^[:word:]]*([[:word:]].+)\.sierra.+/, '\1') # resynthesizer--2.0.3
+
+# Includes bottle.tar.gz and bottle.json
+bottles = Dir["#{bottle_prefix}*\.bottle\.*"]
 
 # Remove double dashes in filenames
 bottles.map! do |b|
   new = b.gsub(/--/, "-")
-  FileUtils.mv b, new unless File.exist? new
+  # Always overwrite json because rebuilds output the same name.
+  if new.end_with?('.json') || ! File.exist? new
+    FileUtils.mv b, new
+  end
   new
 end
 
+bottle.gsub!(/--/, "-")
+bottle_prefix.gsub!(/--/, "-")
+
 orig_os_pattern = /(?<=[^[:word:]])sierra(?=\.?)/
+
+new_bottles = []
 
 # Copy for High Sierra and Mojave
 ["high_sierra", "mojave"].each do |os|
   bottles.each do |b|
     new = b.gsub(orig_os_pattern, os)
-    FileUtils.cp b, new unless File.exist? new
-  end
 
-  Dir["*\.#{os}\.*json"].each do |json_file|
-    c = File.read json_file
-    c.gsub!(orig_os_pattern, os)
-    File.write json_file, c
+    # Never skip json files in case of rebuilds.
+    unless new.end_with? '.json'
+      next if File.exist? new
+    end
+
+    FileUtils.cp b, new
+
+    new_bottles << new
+
+    if new.end_with? '.json'
+      c = File.read new
+      c.gsub!(orig_os_pattern, os)
+      File.write new, c
+    end
   end
 end
 
+bottles += new_bottles
+
 # Update formula with bottle info
-system("brew", "bottle", "--merge", "--write", "--no-commit", *Dir["#{formula}*.json"])
+system("brew", "bottle", "--merge", "--write", "--no-commit", *Dir["#{bottle_prefix}*.json"])
 
 # Post processing
 if formula == "libgimp2.0"
@@ -119,3 +155,8 @@ if formula == "libgimp2.0"
   c.gsub!(/(?<=cellar )".+"/, ':any')
   File.write("Formula/#{formula}.rb", c)
 end
+
+# Output created bottles for possible automation.
+# In another Ruby script, parse with "".shellsplit
+puts "Bottles:"
+puts bottles.grep(/\.tar\.gz$/).map(&:shellescape).join(' ')
