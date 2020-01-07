@@ -13,8 +13,11 @@ def usage
   Usage: #{$0} [-h|-help] [-skip-install] (-t=TAG|-local) -f=FORMULA
   Prepares a bottle for FORMULA for release.
 
-  By default, reinstalls FORMULA with --build-bottle.
+  By default, (re)installs FORMULA with --build-bottle.
   Run with -skip-install if that has already been done.
+
+  Also creates or updates the file 'release-TAG-files' - a newline
+  delimited list of archives that should be included in release tag.
 
     -h, -help\tDisplay this message
     -t=TAG\tThe tag this bottle will be released under (e.g. v1.1).
@@ -22,7 +25,7 @@ def usage
     -local\tThis bottle will be served locally (testing only).
     \t\t-t is ignored.
     -f=FORMULA\tThe formula being bottled (e.g. resynthesizer)
-    -skip-install\tSkip reinstalling FORMULA with the --build-bottle
+    -skip-install\tSkip (re)installing FORMULA with the --build-bottle
     \t\toption. Saves a lot of time when this has already been
     \t\tdone manually.
 
@@ -56,14 +59,18 @@ usage if $f.nil? || ($t.nil? && $local.nil?)
 
 formula = find_formula!($f).shellescape
 
+tag = $t.shellescape
+
 if $local
   root_url = local_url
 else
-  root_url = release_url + $t.shellescape
+  root_url = release_url + tag
 end
 
 # For consistency
 skip_install = $skip_install
+
+release_file = File.expand_path("release-#{tag}-files")
 
 # Generate bottles in `bottle_dir`
 FileUtils.mkdir_p(bottle_dir)
@@ -158,5 +165,14 @@ end
 
 # Output created bottles for possible automation.
 # In another Ruby script, parse with "".shellsplit
+archives = bottles.grep(/\.tar\.gz$/)
 puts "Bottles:"
-puts bottles.grep(/\.tar\.gz$/).map(&:shellescape).join(' ')
+puts archives.map(&:shellescape).join(' ')
+
+unless $local
+  open(release_file, 'a') do |f|
+    archives.each do |a|
+      f.puts "#{bottle_dir}/#{a}"
+    end
+  end
+end

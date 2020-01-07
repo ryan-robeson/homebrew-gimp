@@ -21,6 +21,8 @@ def usage
     \t\topen the title and description in an editor.
     FILES\t\tSpace-separated list of files to include in
     \t\tthe release.
+    \t\tFiles listed in a newline delimited file named 'release-TAG-files'
+    \t\twill also be included.
   eos
   exit 1
 end
@@ -46,7 +48,14 @@ file = $F
 edit = $edit
 
 # Prepare files for hub's command line
-files = ARGV.dup.map do |f|
+files = ARGV.dup
+release_file_name = "release-#{tag}-files"
+
+if File.exist? release_file_name
+  files += File.read(release_file_name).split("\n").reject { |l| l.start_with('#') || l.empty? }
+end
+
+files = files.map do |f|
   if !File.exist? f
     $stderr.puts "Warning: File not found: #{f}. Skipping..."
     next
