@@ -19,7 +19,7 @@ class Pygtk < Formula
   depends_on "gtk+"
   depends_on "libglade"
   depends_on "py2cairo"
-  depends_on "pygobject"
+  depends_on "ryan-robeson/gimp/pygobject"
 
   # Allow building with recent Pango, where some symbols were removed
   patch do
