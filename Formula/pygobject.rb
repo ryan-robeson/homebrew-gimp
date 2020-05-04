@@ -15,7 +15,7 @@ class Pygobject < Formula
 
   depends_on "pkg-config" => :build
   depends_on "glib"
-  depends_on "python@2"
+  depends_on "ryan-robeson/gimp/python@2"
 
   patch do
     url "https://raw.githubusercontent.com/Homebrew/formula-patches/85fa66a9/pygobject/2.28.7.diff"
