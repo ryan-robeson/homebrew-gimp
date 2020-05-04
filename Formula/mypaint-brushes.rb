@@ -8,6 +8,7 @@ class MypaintBrushes < Formula
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
     cellar :any_skip_relocation
+    sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :catalina
     sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :mojave
     sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :high_sierra
     sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :sierra

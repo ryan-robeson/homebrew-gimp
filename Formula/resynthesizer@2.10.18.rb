@@ -7,6 +7,7 @@ class ResynthesizerAT21018 < Formula
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
     cellar :any
+    sha256 "82dd8abe8a17760500c3ef53a8df05cf9ebef03b81c87a92b6227ec5b15b5cba" => :catalina
     sha256 "82dd8abe8a17760500c3ef53a8df05cf9ebef03b81c87a92b6227ec5b15b5cba" => :mojave
     sha256 "82dd8abe8a17760500c3ef53a8df05cf9ebef03b81c87a92b6227ec5b15b5cba" => :high_sierra
     sha256 "82dd8abe8a17760500c3ef53a8df05cf9ebef03b81c87a92b6227ec5b15b5cba" => :sierra

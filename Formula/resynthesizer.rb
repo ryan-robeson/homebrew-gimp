@@ -8,6 +8,7 @@ class Resynthesizer < Formula
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
     cellar :any
     rebuild 1
+    sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :catalina
     sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :mojave
     sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :high_sierra
     sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :sierra

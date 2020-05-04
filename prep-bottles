@@ -126,8 +126,8 @@ orig_os_pattern = /(?<=[^[:word:]])sierra(?=\.?)/
 
 new_bottles = []
 
-# Copy for High Sierra and Mojave
-["high_sierra", "mojave"].each do |os|
+# Copy for High Sierra, Mojave and Catalina
+["high_sierra", "mojave", "catalina"].each do |os|
   bottles.each do |b|
     new = b.gsub(orig_os_pattern, os)
 

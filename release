@@ -52,7 +52,7 @@ files = ARGV.dup
 release_file_name = "release-#{tag}-files"
 
 if File.exist? release_file_name
-  files += File.read(release_file_name).split("\n").reject { |l| l.start_with('#') || l.empty? }
+  files += File.read(release_file_name).split("\n").reject { |l| l.start_with?('#') || l.empty? }
 end
 
 files = files.map do |f|

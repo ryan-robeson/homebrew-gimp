@@ -7,6 +7,7 @@ class Libgimp20AT21014 < Formula
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
     cellar :any
+    sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :catalina
     sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :mojave
     sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :high_sierra
     sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :sierra
