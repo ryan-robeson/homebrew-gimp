@@ -1,14 +1,14 @@
-class Libgimp20 < Formula
+class Libgimp20AT21010 < Formula
   desc "Headers and other files for compiling plugins for GIMP"
   homepage "https://www.gimp.org/"
   url "https://gitlab.gnome.org/GNOME/gimp.git", tag: "GIMP_2_10_10"
   version "2.10.10"
   bottle do
-    root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
+    root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
     cellar :any
-    sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :mojave
-    sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :high_sierra
-    sha256 "51695e98a184759e646802bbe30d72f4292e0ffbbe3f0a3784462c1d1eaad491" => :sierra
+    sha256 "0fc3798eccefefa16d95e1f3d269886701cf9b46d533a8540bf17fe45b227233" => :mojave
+    sha256 "0fc3798eccefefa16d95e1f3d269886701cf9b46d533a8540bf17fe45b227233" => :high_sierra
+    sha256 "0fc3798eccefefa16d95e1f3d269886701cf9b46d533a8540bf17fe45b227233" => :sierra
   end
 
   depends_on "autoconf" => :build
@@ -56,7 +56,7 @@ class Libgimp20 < Formula
 
     system "make"
     #interactive_shell
- 
+
     # Install files based on Debian's packages (libgimp2.0 and libgimp2.0-dev)
     # https://packages.debian.org/sid/amd64/libgimp2.0/filelist
     # https://packages.debian.org/sid/amd64/libgimp2.0-dev/filelist
@@ -82,13 +82,13 @@ class Libgimp20 < Formula
       mkdir_p locale_dir
       locale_dir.install f => locale_dir/"gimp20-libgimp.mo"
     end
-    
+
   end
 
   def caveats
     s = <<~EOS
       If anything goes wrong with the bottle try installing from source.
-        `brew uninstall libgimp2.0; brew install --build-from-source libgimp2.0`
+        `brew uninstall #{specified_name}; brew install --build-from-source #{specified_name}`
 
       Please report any issues to:
         https://github.com/ryan-robeson/homebrew-gimp/issues
@@ -106,6 +106,6 @@ class Libgimp20 < Formula
     #
     # The installed folder is not in the path, so use the entire path to any
     # executables being tested: `system "#{bin}/program", "do", "something"`.
-    system "false"
+    #system "false"
   end
 end

@@ -154,7 +154,7 @@ bottles += new_bottles
 system("brew", "bottle", "--merge", "--write", "--no-commit", *Dir["#{bottle_prefix}*.json"])
 
 # Post processing
-if formula == "libgimp2.0"
+if formula =~ /libgimp2.0/
   # Hopefully Homebrew detecting libgimp2.0 as non-relocatable is a false positive.
   # libgimpbase appears to be the culprit
   c = File.read("../Formula/#{formula}.rb")

@@ -1,4 +1,4 @@
-class Resynthesizer < Formula
+class ResynthesizerAT21010 < Formula
   desc "Suite of gimp plugins for texture synthesis"
   homepage "https://github.com/bootchk/resynthesizer"
   head "https://github.com/bootchk/resynthesizer.git"
@@ -7,17 +7,16 @@ class Resynthesizer < Formula
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
     cellar :any
-    rebuild 1
-    sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :mojave
-    sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :high_sierra
-    sha256 "e2f0213d1f0c2d7aa2934912ad8cc00e495f9c2f43a810fce70658e5fdc2ed97" => :sierra
+    sha256 "b3f5024e3722e2295613be855716af95526506405bda64b001a83e10bd7e8561" => :mojave
+    sha256 "b3f5024e3722e2295613be855716af95526506405bda64b001a83e10bd7e8561" => :high_sierra
+    sha256 "b3f5024e3722e2295613be855716af95526506405bda64b001a83e10bd7e8561" => :sierra
   end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "intltool" => :build
   depends_on "pkg-config" => :build
-  depends_on "ryan-robeson/gimp/libgimp2.0"
+  depends_on "ryan-robeson/gimp/libgimp2.0@2.10.10"
 
   def install
     system "./autogen.sh"

@@ -4,6 +4,14 @@ class ResynthesizerAT21014 < Formula
   head "https://github.com/bootchk/resynthesizer.git"
   url "https://github.com/bootchk/resynthesizer.git", tag: "v2.0.3"
 
+  bottle do
+    root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
+    cellar :any
+    sha256 "acc3040ce0ed6ae965a61a49eebb6d74b8dd337a20094f3bb46d7544fc7564cc" => :mojave
+    sha256 "acc3040ce0ed6ae965a61a49eebb6d74b8dd337a20094f3bb46d7544fc7564cc" => :high_sierra
+    sha256 "acc3040ce0ed6ae965a61a49eebb6d74b8dd337a20094f3bb46d7544fc7564cc" => :sierra
+  end
+
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "intltool" => :build

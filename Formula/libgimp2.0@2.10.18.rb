@@ -1,15 +1,15 @@
-class Libgimp20AT21014 < Formula
+class Libgimp20AT21018 < Formula
   desc "Headers and other files for compiling plugins for GIMP"
   homepage "https://www.gimp.org/"
-  url "https://gitlab.gnome.org/GNOME/gimp.git", tag: "GIMP_2_10_14"
-  version "2.10.14"
+  url "https://gitlab.gnome.org/GNOME/gimp.git", tag: "GIMP_2_10_18"
+  version "2.10.18"
 
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
     cellar :any
-    sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :mojave
-    sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :high_sierra
-    sha256 "82527457f19478b20985b90597144f3e5d40fdcb4fa7369e20a1b05b62f26b0a" => :sierra
+    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :mojave
+    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :high_sierra
+    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :sierra
   end
 
   depends_on "autoconf" => :build
