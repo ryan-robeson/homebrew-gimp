@@ -76,7 +76,7 @@ class Libgimp20AT21018 < Formula
 
     (share + "aclocal").install "m4macros/gimp-2.0.m4"
 
-    bin.install "tools/gimptool-2.0"
+    bin.install Dir["tools/.libs/gimptool-2.0"]
 
     Dir["po-libgimp/*.gmo"].each do |f|
       locale = File.basename(f).gsub(/(.+)\.gmo/, '\1')
