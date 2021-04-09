@@ -6,11 +6,10 @@ class Libgimp20AT21018 < Formula
 
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.2"
-    cellar :any
-    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :catalina
-    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :mojave
-    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :high_sierra
-    sha256 "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c" => :sierra
+    sha256 cellar: :any, catalina:    "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c"
+    sha256 cellar: :any, mojave:      "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c"
+    sha256 cellar: :any, high_sierra: "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c"
+    sha256 cellar: :any, sierra:      "198acf2dbc825deab43c7969d66eb0ed6c59a479a4adbed9eb941db938c7243c"
   end
 
   depends_on "autoconf" => :build
