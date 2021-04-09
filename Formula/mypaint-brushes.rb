@@ -1,17 +1,16 @@
 class MypaintBrushes < Formula
   desc "Brushes used by MyPaint and other software using libmypaint"
   homepage "https://github.com/mypaint/mypaint-brushes/tree/v1.3.x"
-  #head "https://github.com/mypaint/mypaint-brushes.git"
+  # head "https://github.com/mypaint/mypaint-brushes.git"
   url "https://github.com/mypaint/mypaint-brushes.git", branch: "v1.3.x"
   version "v1.3.x"
 
   bottle do
     root_url "https://github.com/ryan-robeson/homebrew-gimp/releases/download/v1.0"
-    cellar :any_skip_relocation
-    sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :catalina
-    sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :mojave
-    sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :high_sierra
-    sha256 "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65" => :sierra
+    sha256 cellar: :any_skip_relocation, catalina:    "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65"
+    sha256 cellar: :any_skip_relocation, mojave:      "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65"
+    sha256 cellar: :any_skip_relocation, high_sierra: "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65"
+    sha256 cellar: :any_skip_relocation, sierra:      "370bda5f529377983e0a6a17a58ff29f437f03885e2dc92f4e49e262fdbcfd65"
   end
 
   depends_on "autoconf" => :build
