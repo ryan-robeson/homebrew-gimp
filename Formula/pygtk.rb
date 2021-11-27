@@ -6,11 +6,9 @@ class Pygtk < Formula
   revision 3
 
   bottle do
-    cellar :any
-    rebuild 2
-    sha256 "12bab3d76587659b38e56867c9b359941803275716896e2936cd3e8029cf5f3f" => :catalina
-    sha256 "87f89d246e3a779381ec2efdee7ee2b69fda464f38a59dd8e14304435d759419" => :mojave
-    sha256 "969cef803e110b2767c6d3ade304b92d7f23a02ff7eb4030772b69b52df7c3b2" => :high_sierra
+    sha256 catalina: "12bab3d76587659b38e56867c9b359941803275716896e2936cd3e8029cf5f3f"
+    sha256 mojave: "87f89d246e3a779381ec2efdee7ee2b69fda464f38a59dd8e14304435d759419"
+    sha256 high_sierra: "969cef803e110b2767c6d3ade304b92d7f23a02ff7eb4030772b69b52df7c3b2"
   end
 
   depends_on "pkg-config" => :build
